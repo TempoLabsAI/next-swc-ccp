@@ -1,8 +1,8 @@
 export default {
     providers: [
-        {
-            domain: "https://creative-malamute-43.clerk.accounts.dev",
-            applicationID: "convex",
-        },
+      {
+        domain: process.env.CLERK_SIGNING_KEY,
+        applicationID: "convex",
+      },
     ]
-};
+  };
