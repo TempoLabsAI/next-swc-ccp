@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Script from "next/script";
 import { ThemeProvider } from "@/components/theme-provider";
+import { ClerkProvider } from "@clerk/nextjs";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -28,16 +29,18 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <Script src="https://api.tempolabs.ai/proxy-asset?url=https://storage.googleapis.com/tempo-public-assets/error-handling.js" />
-      <body className={`${geistSans.variable} ${geistMono.variable} bg-background`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem={false}
-          disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider>
-      </body>
+      <ClerkProvider>
+        <body className={`${geistSans.variable} ${geistMono.variable} bg-background`}>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="dark"
+            enableSystem={false}
+            disableTransitionOnChange
+          >
+            {children}
+          </ThemeProvider>
+        </body>
+      </ClerkProvider>
     </html>
   );
 }

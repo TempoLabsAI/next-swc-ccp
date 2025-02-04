@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, Sparkles, LogIn } from "lucide-react";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -21,18 +22,12 @@ export default function Home() {
           </p>
           
           <div className="flex flex-wrap justify-center gap-4 pt-6">
-            <Button size="lg" className="group bg-primary/10 hover:bg-primary/20 text-primary">
-              Clerk Auth
-              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Button>
-            <Button size="lg" variant="secondary" className="group bg-secondary/10 hover:bg-secondary/20">
-              Convex DB
-              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Button>
-            <Button size="lg" variant="outline" className="group border-muted hover:bg-muted/50">
-              Polar Payments
-              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Button>
+            <Link href="/sign-in">
+              <Button size="lg" className="group bg-primary hover:bg-primary/90">
+                Sign In
+                <LogIn className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
