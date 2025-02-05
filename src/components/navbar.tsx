@@ -1,10 +1,22 @@
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
+"use client"
+
 import { ThemeSwitch } from "@/components/theme-switch";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export function Navbar() {
+  // const { isSignedIn } = useAuth();
+  // const user = useQuery(api.users.getUser);
+  // const storeUser = useMutation(api.users.store);
+
+  // useEffect(() => {
+  //   if (user && isSignedIn) {
+  //     storeUser();
+  //   }
+  // }, [user, isSignedIn]);
+
   return (
-    <nav className="border-b w-full">
+    <nav className="border-b dark:border-zinc-900 w-full">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <Link href="/">
@@ -24,7 +36,7 @@ export function Navbar() {
             <Link href="/sign-in">
               <Button variant="ghost" size="sm">Sign In</Button>
             </Link>
-            <Link href="/sign-up">
+            <Link href="/dashboard">
               <Button size="sm">Get Started</Button>
             </Link>
           </div>

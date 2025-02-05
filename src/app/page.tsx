@@ -3,7 +3,6 @@ import { Navbar } from "@/components/navbar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Check, Database, Globe, Shield, Star, Zap } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 
 const features = [
@@ -34,19 +33,19 @@ const testimonials = [
     name: "Sarah Johnson",
     role: "CTO at TechFlow",
     content: "This template saved us weeks of development time. The integration between services is seamless.",
-    avatar: "/avatars/avatar-1.png",
+    avatar: "",
   },
   {
     name: "Michael Chen",
     role: "Founder, DataStack",
     content: "The best starter template I've used. Clean code, modern stack, and excellent documentation.",
-    avatar: "/avatars/avatar-2.png",
+    avatar: "",
   },
   {
     name: "Emma Williams",
     role: "Lead Developer",
     content: "Perfect balance of features and simplicity. Exactly what we needed for our MVP.",
-    avatar: "/avatars/avatar-3.png",
+    avatar: "",
   },
 ];
 
@@ -94,7 +93,7 @@ export default function Home() {
             </p>
 
             <div className="flex flex-wrap justify-center gap-4 pt-6">
-              <Link href="/sign-up">
+              <Link href="/sign-in">
                 <Button size="lg" className="group">
                   Start Building
                   <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -132,7 +131,7 @@ export default function Home() {
             <p className="text-muted-foreground mt-2">Don't just take our word for it</p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, i) => (
+            {/* {testimonials.map((testimonial, i) => (
               <div key={i} className="p-6 bg-muted/50 rounded-lg">
                 <div className="flex items-center mb-4">
                   <div className="relative h-12 w-12 mr-4">
@@ -150,7 +149,7 @@ export default function Home() {
                 </div>
                 <p className="text-muted-foreground">{testimonial.content}</p>
               </div>
-            ))}
+            ))} */}
           </div>
         </div>
       </section>
