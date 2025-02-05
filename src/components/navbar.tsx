@@ -7,11 +7,21 @@ import { useMutation, useQuery } from "convex/react";
 import Link from "next/link";
 import { api } from "../../convex/_generated/api";
 import { useEffect } from "react";
+import { useCanAccessDashboard } from "@/lib/useAuthHelpers";
+import { redirect, usePathname } from "next/navigation";
 
 export function Navbar() {
   const { isSignedIn } = useAuth();
   const user = useQuery(api.users.getUser);
   const storeUser = useMutation(api.users.store);
+  // Inside your component
+  const canAccess = useCanAccessDashboard();
+  const pathname = usePathname();
+
+  if (pathname === "/dashboard" && !canAccess) {
+    redirect("/#pricing");
+  }
+
 
   useEffect(() => {
     if (user && isSignedIn) {

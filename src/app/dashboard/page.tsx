@@ -1,11 +1,10 @@
 'use client'
 
-import { Suspense } from 'react'
-import { Navbar } from "@/components/navbar"
-import { PriceChart } from "@/components/trading/price-chart"
 import { OrderBook } from "@/components/trading/order-book"
-import { TradingForm } from "@/components/trading/trading-form"
+import { PriceChart } from "@/components/trading/price-chart"
 import { RecentTrades } from "@/components/trading/recent-trades"
+import { TradingForm } from "@/components/trading/trading-form"
+import { Suspense } from 'react'
 
 function LoadingComponent() {
   return (
@@ -17,39 +16,34 @@ function LoadingComponent() {
 
 export default function Dashboard() {
   return (
-    <div className="min-h-screen bg-muted/30">
-      <Navbar />
-      <main className="container mx-auto p-6">
-        <div className="grid grid-cols-12 gap-6">
-          {/* Main Chart */}
-          <div className="col-span-12 xl:col-span-8">
-            <Suspense fallback={<LoadingComponent />}>
-              <PriceChart />
-            </Suspense>
-          </div>
+    <div className="grid grid-cols-12 gap-6">
+      {/* Main Chart */}
+      <div className="col-span-12 xl:col-span-8">
+        <Suspense fallback={<LoadingComponent />}>
+          <PriceChart />
+        </Suspense>
+      </div>
 
-          {/* Trading Form */}
-          <div className="col-span-12 xl:col-span-4">
-            <Suspense fallback={<LoadingComponent />}>
-              <TradingForm />
-            </Suspense>
-          </div>
+      {/* Trading Form */}
+      <div className="col-span-12 xl:col-span-4">
+        <Suspense fallback={<LoadingComponent />}>
+          <TradingForm />
+        </Suspense>
+      </div>
 
-          {/* Order Book */}
-          <div className="col-span-12 lg:col-span-6 xl:col-span-4">
-            <Suspense fallback={<LoadingComponent />}>
-              <OrderBook />
-            </Suspense>
-          </div>
+      {/* Order Book */}
+      <div className="col-span-12 lg:col-span-6 xl:col-span-4">
+        <Suspense fallback={<LoadingComponent />}>
+          <OrderBook />
+        </Suspense>
+      </div>
 
-          {/* Recent Trades */}
-          <div className="col-span-12 lg:col-span-6 xl:col-span-8">
-            <Suspense fallback={<LoadingComponent />}>
-              <RecentTrades />
-            </Suspense>
-          </div>
-        </div>
-      </main>
+      {/* Recent Trades */}
+      <div className="col-span-12 lg:col-span-6 xl:col-span-8">
+        <Suspense fallback={<LoadingComponent />}>
+          <RecentTrades />
+        </Suspense>
+      </div>
     </div>
   )
 }

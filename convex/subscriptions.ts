@@ -154,7 +154,6 @@ export const getProOnboardingCheckoutUrl = action({
             metadata
         });
 
-        console.log("Checkout:", checkout);
 
         return checkout.url;
     },

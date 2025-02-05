@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@clerk/nextjs";
 import { useAction } from "convex/react";
 import { Check } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { api } from "../../../convex/_generated/api";
 
 interface PricingPlan {
@@ -17,14 +17,14 @@ interface PricingPlan {
 const pricingPlans: PricingPlan[] = [
   {
     name: "Monthly",
-    price: "$12",
+    price: "$50",
     description: "Perfect for individual projects",
     features: ["Up to 1,000 users", "Basic analytics", "Community support"],
     interval: "month",
   },
   {
     name: "Yearly",
-    price: "$100",
+    price: "$500",
     description: "Save $44 annually",
     features: ["Everything in Monthly", "Priority support", "Custom domains", "Early access to features"],
     interval: "year",
@@ -62,16 +62,16 @@ export function Pricing() {
                   ))}
                 </ul>
               </div>
-              <Button onClick={() => {
-                console.log("CLICKED")
+              <Button onClick={async () => {
                 if (!user?.isSignedIn) {
                   router.push("/sign-in")
-                  return
                 }
-                console.log("SUBSCRIPTION")
-                handleSubscription({
+
+                const result = await handleSubscription({
                   interval: plan.interval
                 })
+
+                router.push(result)
               }
               } className="w-full" variant={i === 1 ? "default" : "outline"}>
                 Get Started
