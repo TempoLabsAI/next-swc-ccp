@@ -2,18 +2,22 @@
 
 import { ThemeSwitch } from "@/components/theme-switch";
 import { Button } from "@/components/ui/button";
+import { useAuth, UserButton } from "@clerk/nextjs";
+import { useMutation, useQuery } from "convex/react";
 import Link from "next/link";
+import { api } from "../../convex/_generated/api";
+import { useEffect } from "react";
 
 export function Navbar() {
-  // const { isSignedIn } = useAuth();
-  // const user = useQuery(api.users.getUser);
-  // const storeUser = useMutation(api.users.store);
+  const { isSignedIn } = useAuth();
+  const user = useQuery(api.users.getUser);
+  const storeUser = useMutation(api.users.store);
 
-  // useEffect(() => {
-  //   if (user && isSignedIn) {
-  //     storeUser();
-  //   }
-  // }, [user, isSignedIn]);
+  useEffect(() => {
+    if (user && isSignedIn) {
+      storeUser();
+    }
+  }, [user, isSignedIn]);
 
   return (
     <nav className="border-b dark:border-zinc-900 w-full">
@@ -30,16 +34,16 @@ export function Navbar() {
             <Link href="/#pricing" className="text-sm text-muted-foreground hover:text-primary">Pricing</Link>
           </div>
         </div>
-        <div className="flex items-center">
+        <div className={"flex justify-center items-center" + (isSignedIn && " gap-2")}>
           <ThemeSwitch />
-          <div className="space-x-4">
+          {isSignedIn ? <UserButton /> : <div className="space-x-4">
             <Link href="/sign-in">
               <Button variant="ghost" size="sm">Sign In</Button>
             </Link>
             <Link href="/dashboard">
               <Button size="sm">Get Started</Button>
             </Link>
-          </div>
+          </div>}
         </div>
       </div>
     </nav >

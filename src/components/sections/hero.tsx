@@ -1,9 +1,11 @@
-import Link from "next/link";
-import { ArrowRight, Star } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { auth } from "@clerk/nextjs/server";
+import { ArrowRight, Star } from "lucide-react";
+import Link from "next/link";
 
-export function Hero() {
+export async function Hero() {
+  const { userId } = await auth();
   return (
     <section className="py-20">
       <div className="container px-4">
@@ -22,7 +24,7 @@ export function Hero() {
           </p>
 
           <div className="flex flex-wrap justify-center gap-4 pt-6">
-            <Link href="/sign-in">
+            <Link href={userId ? "/dashboard" : "/sign-in"}>
               <Button size="lg" className="group">
                 Start Building
                 <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
