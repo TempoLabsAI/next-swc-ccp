@@ -107,7 +107,7 @@ export const getProOnboardingCheckoutUrl = action({
     handler: async (ctx, args) => {
         const identity = await ctx.auth.getUserIdentity();
         if (!identity) {
-            throw new Error("Not authenticated");
+            return null
         }
 
         const user = await ctx.runQuery(api.users.getUserByToken, {
@@ -154,6 +154,7 @@ export const getProOnboardingCheckoutUrl = action({
             metadata
         });
 
+        console.log("Checkout:", checkout);
 
         return checkout.url;
     },
@@ -162,7 +163,7 @@ export const getProOnboardingCheckoutUrl = action({
 export const getUserSubscriptionStatus = query({
     handler: async (ctx) => {
         const identity = await ctx.auth.getUserIdentity();
-        console.log("identity", identity)
+
         if (!identity) {
             return { hasActiveSubscription: false };
         }
@@ -191,6 +192,7 @@ export const getUserSubscriptionStatus = query({
 export const getUserSubscription = query({
     handler: async (ctx) => {
         const identity = await ctx.auth.getUserIdentity();
+
         if (!identity) {
             return null;
         }
@@ -199,6 +201,33 @@ export const getUserSubscription = query({
             .query("users")
             .withIndex("by_token", (q) =>
                 q.eq("tokenIdentifier", identity.subject)
+            )
+            .unique();
+
+        if (!user) {
+            return null;
+        }
+
+        const subscription = await ctx.db
+            .query("subscriptions")
+            .withIndex("userId", (q) => q.eq("userId", user.tokenIdentifier))
+            .first();
+
+        return subscription;
+    }
+});
+
+export const getUserSubscriptionById = query({
+    args: {
+        userId: v.string(),
+    },
+    handler: async (ctx, args) => {
+
+
+        const user = await ctx.db
+            .query("users")
+            .withIndex("by_token", (q) =>
+                q.eq("tokenIdentifier", args.userId)
             )
             .unique();
 
@@ -235,7 +264,6 @@ export const subscriptionStoreWebhook = mutation({
 
         switch (eventType) {
             case 'subscription.created':
-                console.log("subscription.created:", args.body);
 
                 // Insert new subscription
                 await ctx.db.insert("subscriptions", {
@@ -265,8 +293,6 @@ export const subscriptionStoreWebhook = mutation({
                 break;
 
             case 'subscription.updated':
-                console.log("subscription.updated:", args.body);
-
                 // Find existing subscription
                 const existingSub = await ctx.db
                     .query("subscriptions")
@@ -287,8 +313,6 @@ export const subscriptionStoreWebhook = mutation({
                 break;
 
             case 'subscription.active':
-                console.log("subscription.active:", args.body);
-
                 // Find and update subscription
                 const activeSub = await ctx.db
                     .query("subscriptions")
@@ -304,8 +328,6 @@ export const subscriptionStoreWebhook = mutation({
                 break;
 
             case 'subscription.canceled':
-                console.log("subscription.canceled:", args.body);
-
                 // Find and update subscription
                 const canceledSub = await ctx.db
                     .query("subscriptions")
@@ -325,8 +347,6 @@ export const subscriptionStoreWebhook = mutation({
                 break;
 
             case 'subscription.uncanceled':
-                console.log("subscription.uncanceled:", args.body);
-
                 // Find and update subscription
                 const uncanceledSub = await ctx.db
                     .query("subscriptions")
@@ -345,8 +365,6 @@ export const subscriptionStoreWebhook = mutation({
                 break;
 
             case 'subscription.revoked':
-                console.log("subscription.revoked:", args.body);
-
                 // Find and update subscription
                 const revokedSub = await ctx.db
                     .query("subscriptions")

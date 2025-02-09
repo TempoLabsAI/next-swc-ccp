@@ -8,7 +8,7 @@ import { Suspense } from 'react'
 
 function LoadingComponent() {
   return (
-    <div className="flex justify-center items-center min-h-[400px] bg-background rounded-xl border shadow-sm">
+    <div className="flex justify-center items-center min-h-[400px] dark:bg-[#1F1F1F] dark:border-[#2F2F2F] bg-background rounded-xl border shadow-sm">
       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-violet-500"></div>
     </div>
   )

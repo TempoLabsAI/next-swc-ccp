@@ -71,6 +71,10 @@ export function Pricing() {
                   interval: plan.interval
                 })
 
+                if (!result) {
+                  throw new Error("No result")
+                }
+
                 router.push(result)
               }
               } className="w-full" variant={i === 1 ? "default" : "outline"}>
