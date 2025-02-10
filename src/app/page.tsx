@@ -2,10 +2,15 @@ import { Footer } from "@/components/footer";
 import { Navbar } from "@/components/navbar";
 import { Features } from "@/components/sections/features";
 import { Hero } from "@/components/sections/hero";
-import { Pricing } from "@/components/sections/pricing";
+import Pricing from "@/components/sections/pricing";
 import { Testimonials } from "@/components/sections/testimonials";
+import { polar } from "@/lib/polar";
 
-export default function Home() {
+export default async function Home() {
+  const { result } = await polar.products.list({
+    organizationId: process.env.POLAR_ORGANIZATION_ID
+  })
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
@@ -20,7 +25,7 @@ export default function Home() {
       <Testimonials />
 
       {/* Pricing Section */}
-      <Pricing />
+      <Pricing result={result as any} />
 
       <Footer />
     </div>
