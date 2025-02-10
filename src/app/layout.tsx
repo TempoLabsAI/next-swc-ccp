@@ -5,6 +5,7 @@ import Script from "next/script";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ClerkProvider } from "@clerk/nextjs";
 import Provider from "@/components/convex-provider";
+import { TempoInit } from "@/components/tempo-init";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -32,6 +33,7 @@ export default function RootLayout({
             >
               {children}
             </ThemeProvider>
+            <TempoInit />
           </Provider>
         </body>
       </html>
