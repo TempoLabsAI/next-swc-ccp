@@ -19,6 +19,7 @@ import { useEffect, useState } from "react";
 import { api } from "../../../convex/_generated/api";
 
 interface Price {
+  id: string;
   priceAmount: number;
   recurringInterval: 'month' | 'year';
 }
@@ -117,26 +118,34 @@ const PricingCard = ({
   exclusive,
 }: PricingCardProps) => {
   const router = useRouter();
+  const getProCheckoutUrl = useAction(api.subscriptions.getProOnboardingCheckoutUrl);
 
-  const currentPrice: any = prices.find(price =>
+  const currentPrice = prices.find(price =>
     isYearly
       ? price.recurringInterval === 'year'
       : price.recurringInterval === 'month'
   );
-  const getProCheckoutUrl = useAction(api.subscriptions.getProOnboardingCheckoutUrl);
-
 
   const priceAmount = currentPrice ? (currentPrice.priceAmount / 100).toFixed(2) : 0;
 
-  const handleCheckout = async (priceId: string) => {
+  const handleCheckout = async () => {
+    if (!user) {
+      router.push("/sign-in");
+      return;
+    }
+
+    if (!currentPrice?.id) {
+      console.error("No price ID available");
+      return;
+    }
 
     try {
-      const checkoutProUrl = await getProCheckoutUrl({
-        priceId
+      const checkoutUrl = await getProCheckoutUrl({
+        priceId: currentPrice.id
       });
 
-      if (checkoutProUrl) {
-        window.location.href = checkoutProUrl;
+      if (checkoutUrl) {
+        window.location.href = checkoutUrl;
       }
     } catch (error) {
       console.error("Failed to get checkout URL:", error);
@@ -209,13 +218,7 @@ const PricingCard = ({
 
       <CardFooter className="pt-4">
         <Button
-          onClick={() => {
-            if (!user) {
-              router.push("/sign-in");
-              return;
-            }
-            handleCheckout(currentPrice?.id);
-          }}
+          onClick={handleCheckout}
           className={cn("w-full text-base font-semibold", {
             "bg-blue-500 hover:bg-blue-600 text-white": popular,
             "bg-white text-gray-900 hover:bg-gray-100": exclusive,
@@ -233,21 +236,19 @@ export default function Pricing({ result }: PricingProps) {
   const [plans, setPlans] = useState<Omit<PricingCardProps, 'user' | 'isYearly'>[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [hasYearlyPlans, setHasYearlyPlans] = useState(false);
+  const { user } = useUser();
 
   const togglePricingPeriod = (value: string) =>
     setIsYearly(parseInt(value) === 1);
-  const { user } = useUser();
 
   useEffect(() => {
     const fetchPlans = async () => {
       try {
-        // Check if any products have yearly pricing
         const hasYearly = result.items.some(product =>
           product.prices.some(price => price.recurringInterval === 'year')
         );
         setHasYearlyPlans(hasYearly);
 
-        // If we're on yearly view but no yearly plans exist, switch to monthly
         if (isYearly && !hasYearly) {
           setIsYearly(false);
         }
@@ -276,7 +277,7 @@ export default function Pricing({ result }: PricingProps) {
     };
 
     fetchPlans();
-  }, [isYearly]);
+  }, [result, isYearly]);
 
   if (isLoading) {
     return (
@@ -330,7 +331,6 @@ export default function Pricing({ result }: PricingProps) {
         <div className="flex flex-col md:flex-row justify-center items-center gap-8 mt-8">
           {plans
             .filter(plan => {
-              // Only show plans that have prices for the current interval
               return plan.prices.some(price =>
                 isYearly
                   ? price.recurringInterval === 'year'

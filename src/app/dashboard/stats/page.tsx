@@ -8,9 +8,7 @@ import { api } from "../../../../convex/_generated/api";
 export default async function StatsPage() {
   const user = await currentUser();
 
-  const subscription = await fetchQuery(api.subscriptions.getUserSubscriptionById, {
-    userId: user?.id!
-  });
+  const subscription = await fetchQuery(api.subscriptions.getUserSubscription);
   const hasActiveSubscription = subscription?.status === "active";
 
   return (
@@ -98,19 +96,19 @@ export default async function StatsPage() {
               )}
             </div>
             <div className="grid gap-4">
-              <InfoItem label="Plan Amount" value="$12.00" />
+              <InfoItem label="Plan Amount" value={`${subscription?.amount ?? 'N/A'}`} />
               <InfoItem label="Billing Interval" value={subscription?.interval || 'N/A'} capitalize />
-              <InfoItem 
-                label="Current Period" 
+              <InfoItem
+                label="Current Period"
                 value={subscription?.currentPeriodEnd
                   ? `${new Date(subscription._creationTime).toLocaleDateString()} - ${new Date(subscription.currentPeriodEnd).toLocaleDateString()}`
-                  : 'N/A'} 
+                  : 'N/A'}
               />
-              <InfoItem 
-                label="Started At" 
+              <InfoItem
+                label="Started At"
                 value={subscription?._creationTime
                   ? new Date(subscription._creationTime).toLocaleDateString()
-                  : 'N/A'} 
+                  : 'N/A'}
               />
               <InfoItem label="Polar ID" value={subscription?.polarId || 'N/A'} monospace />
             </div>
@@ -152,9 +150,9 @@ export default async function StatsPage() {
   );
 }
 
-function InfoItem({ label, value, monospace, capitalize }: { 
-  label: string; 
-  value?: string | null; 
+function InfoItem({ label, value, monospace, capitalize }: {
+  label: string;
+  value?: string | null;
   monospace?: boolean;
   capitalize?: boolean;
 }) {
