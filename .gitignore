@@ -40,3 +40,5 @@ next-env.d.ts
 **/tempobook/storyboards/
 # clerk configuration (can include secrets)
 /.clerk/
+
+.github/
